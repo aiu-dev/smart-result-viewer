@@ -86,7 +86,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>📋 Advanced Todo Reminder</h1>
+      <h1>📋  Todolists</h1>
 
       <div className="form">
         <input
