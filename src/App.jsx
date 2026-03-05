@@ -4,25 +4,52 @@ function App() {
   const [task, setTask] = useState("");
   const [dateTime, setDateTime] = useState("");
   const [todos, setTodos] = useState([]);
+  const [editingId, setEditingId] = useState(null);
 
-  // Ask notification permission on load
+  // LOAD FROM LOCAL STORAGE
   useEffect(() => {
+    const savedTodos = JSON.parse(localStorage.getItem("todos")) || [];
+    setTodos(savedTodos);
+
+    // Reschedule notifications after refresh
+    savedTodos.forEach((todo) => {
+      if (!todo.completed) {
+        scheduleNotification(todo);
+      }
+    });
+
     if ("Notification" in window) {
       Notification.requestPermission();
     }
   }, []);
 
-  const addTodo = () => {
+  // SAVE TO LOCAL STORAGE
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
+
+  const addOrUpdateTodo = () => {
     if (!task || !dateTime) return;
 
-    const newTodo = {
-      id: Date.now(),
-      text: task,
-      time: new Date(dateTime).getTime(),
-    };
+    if (editingId) {
+      const updatedTodos = todos.map((todo) =>
+        todo.id === editingId
+          ? { ...todo, text: task, time: new Date(dateTime).getTime() }
+          : todo
+      );
+      setTodos(updatedTodos);
+      setEditingId(null);
+    } else {
+      const newTodo = {
+        id: Date.now(),
+        text: task,
+        time: new Date(dateTime).getTime(),
+        completed: false,
+      };
 
-    setTodos([...todos, newTodo]);
-    scheduleNotification(newTodo);
+      setTodos([...todos, newTodo]);
+      scheduleNotification(newTodo);
+    }
 
     setTask("");
     setDateTime("");
@@ -32,9 +59,22 @@ function App() {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
+  const toggleComplete = (id) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
+  const editTodo = (todo) => {
+    setTask(todo.text);
+    setDateTime(new Date(todo.time).toISOString().slice(0, 16));
+    setEditingId(todo.id);
+  };
+
   const scheduleNotification = (todo) => {
     const delay = todo.time - Date.now();
-
     if (delay > 0) {
       setTimeout(() => {
         new Notification("⏰ Task Reminder", {
@@ -45,92 +85,51 @@ function App() {
   };
 
   return (
-    <div style={styles.container}>
-      <h1>📋 Todo Reminder App</h1>
+    <div className="container">
+      <h1>📋 Advanced Todo Reminder</h1>
 
-      <div style={styles.inputContainer}>
+      <div className="form">
         <input
           type="text"
           placeholder="Enter task..."
           value={task}
           onChange={(e) => setTask(e.target.value)}
-          style={styles.input}
         />
 
         <input
           type="datetime-local"
           value={dateTime}
           onChange={(e) => setDateTime(e.target.value)}
-          style={styles.input}
         />
 
-        <button onClick={addTodo} style={styles.addButton}>
-          Add
+        <button onClick={addOrUpdateTodo}>
+          {editingId ? "Update" : "Add"}
         </button>
       </div>
 
-      <div style={styles.list}>
+      <div className="list">
         {todos.map((todo) => (
-          <div key={todo.id} style={styles.card}>
+          <div
+            key={todo.id}
+            className={`card ${todo.completed ? "completed" : ""}`}
+          >
             <div>
-              <strong>{todo.text}</strong>
+              <h3>{todo.text}</h3>
               <p>{new Date(todo.time).toLocaleString()}</p>
             </div>
-            <button
-              onClick={() => deleteTodo(todo.id)}
-              style={styles.deleteButton}
-            >
-              Delete
-            </button>
+
+            <div className="actions">
+              <button onClick={() => toggleComplete(todo.id)}>
+                {todo.completed ? "Undo" : "Done"}
+              </button>
+              <button onClick={() => editTodo(todo)}>Edit</button>
+              <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+            </div>
           </div>
         ))}
       </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    maxWidth: "600px",
-    margin: "auto",
-    padding: "20px",
-    fontFamily: "Arial",
-  },
-  inputContainer: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-  input: {
-    padding: "10px",
-    fontSize: "16px",
-  },
-  addButton: {
-    padding: "10px",
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    cursor: "pointer",
-  },
-  list: {
-    marginTop: "20px",
-  },
-  card: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "10px",
-    marginBottom: "10px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-  },
-  deleteButton: {
-    backgroundColor: "red",
-    color: "white",
-    border: "none",
-    padding: "6px 10px",
-    cursor: "pointer",
-  },
-};
 
 export default App;
