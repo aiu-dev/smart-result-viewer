@@ -1,134 +1,84 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { ThemeProvider } from "styled-components";
+
+import { lightTheme, darkTheme } from "./styles/theme";
+import { GlobalStyle } from "./styles/GlobalStyle";
+import Header from "./components/Header";
+import TaskCard from "./components/TaskCard";
+import TaskForm from "./components/TaskForm";
+import ThemeToggle from "./components/ThemeToggle";
+
+import {
+  loadTasks,
+  addTask,
+  deleteTask,
+  toggleTask
+} from "./utils/storage";
 
 function App() {
-  const [task, setTask] = useState("");
-  const [dateTime, setDateTime] = useState("");
-  const [todos, setTodos] = useState([]);
-  const [editingId, setEditingId] = useState(null);
 
-  // LOAD FROM LOCAL STORAGE
-  useEffect(() => {
-    const savedTodos = JSON.parse(localStorage.getItem("todos")) || [];
-    setTodos(savedTodos);
+  // Load tasks from storage
+  const [tasks, setTasks] = useState(loadTasks());
 
-    // Reschedule notifications after refresh
-    savedTodos.forEach((todo) => {
-      if (!todo.completed) {
-        scheduleNotification(todo);
-      }
-    });
+  // Theme state
+  const [dark, setDark] = useState(false);
 
-    if ("Notification" in window) {
-      Notification.requestPermission();
-    }
-  }, []);
+  // Add new task
+  function handleAddTask(text) {
 
-  // SAVE TO LOCAL STORAGE
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
+    if (!text.trim()) return;
 
-  const addOrUpdateTodo = () => {
-    if (!task || !dateTime) return;
+    const newTask = {
+      text: text,
+      done: false
+    };
 
-    if (editingId) {
-      const updatedTodos = todos.map((todo) =>
-        todo.id === editingId
-          ? { ...todo, text: task, time: new Date(dateTime).getTime() }
-          : todo
-      );
-      setTodos(updatedTodos);
-      setEditingId(null);
-    } else {
-      const newTodo = {
-        id: Date.now(),
-        text: task,
-        time: new Date(dateTime).getTime(),
-        completed: false,
-      };
+    const updatedTasks = addTask(tasks, newTask);
 
-      setTodos([...todos, newTodo]);
-      scheduleNotification(newTodo);
-    }
+    setTasks(updatedTasks);
+  }
 
-    setTask("");
-    setDateTime("");
-  };
+  // Delete task
+  function handleDeleteTask(index) {
 
-  const deleteTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-  };
+    const updatedTasks = deleteTask(tasks, index);
 
-  const toggleComplete = (id) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
-  };
+    setTasks(updatedTasks);
+  }
 
-  const editTodo = (todo) => {
-    setTask(todo.text);
-    setDateTime(new Date(todo.time).toISOString().slice(0, 16));
-    setEditingId(todo.id);
-  };
+  // Toggle task completion
+  function handleToggleTask(index) {
 
-  const scheduleNotification = (todo) => {
-    const delay = todo.time - Date.now();
-    if (delay > 0) {
-      setTimeout(() => {
-        new Notification("⏰ Task Reminder", {
-          body: todo.text,
-        });
-      }, delay);
-    }
-  };
+    const updatedTasks = toggleTask(tasks, index);
+
+    setTasks(updatedTasks);
+  }
+
+  // Switch theme
+  function toggleTheme() {
+    setDark(!dark);
+  }
 
   return (
-    <div className="container">
-      <h1>📋  Todolists</h1>
+    <ThemeProvider theme={dark ? darkTheme : lightTheme}>
 
-      <div className="form">
-        <input
-          type="text"
-          placeholder="Enter task..."
-          value={task}
-          onChange={(e) => setTask(e.target.value)}
+      <GlobalStyle />
+
+      <Header toggleTheme={toggleTheme} />
+
+      <TaskForm addTask={handleAddTask} />
+
+      {tasks.map((task, index) => (
+        <TaskCard
+          key={index}
+          task={task.text}
+          done={task.done}
+          onDelete={() => handleDeleteTask(index)}
+          onToggle={() => handleToggleTask(index)}
         />
+      ))}
 
-        <input
-          type="datetime-local"
-          value={dateTime}
-          onChange={(e) => setDateTime(e.target.value)}
-        />
-
-        <button onClick={addOrUpdateTodo}>
-          {editingId ? "Update" : "Add"}
-        </button>
-      </div>
-
-      <div className="list">
-        {todos.map((todo) => (
-          <div
-            key={todo.id}
-            className={`card ${todo.completed ? "completed" : ""}`}
-          >
-            <div>
-              <h3>{todo.text}</h3>
-              <p>{new Date(todo.time).toLocaleString()}</p>
-            </div>
-
-            <div className="actions">
-              <button onClick={() => toggleComplete(todo.id)}>
-                {todo.completed ? "Undo" : "Done"}
-              </button>
-              <button onClick={() => editTodo(todo)}>Edit</button>
-              <button onClick={() => deleteTodo(todo.id)}>Delete</button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    </ThemeProvider>
   );
 }
 
