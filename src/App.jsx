@@ -1,85 +1,72 @@
-import { useState } from "react";
-import { ThemeProvider } from "styled-components";
-
-import { lightTheme, darkTheme } from "./styles/theme";
-import { GlobalStyle } from "./styles/GlobalStyle";
+import {useState,useEffect} from "react";
 import Header from "./components/Header";
-import TaskCard from "./components/TaskCard";
-import TaskForm from "./components/TaskForm";
-import ThemeToggle from "./components/ThemeToggle";
+import Form from "./components/Form";
+import Table from "./components/Table";
+import GlobalStyle from "./styles/GlobalStyle";
+import {saveUsers,getUsers} from "./utils/storage";
 
-import {
-  loadTasks,
-  addTask,
-  deleteTask,
-  toggleTask
-} from "./utils/storage";
+function App(){
 
-function App() {
+const [users,setUsers] = useState([]);
+const [editUser,setEditUser] = useState(null);
 
-  // Load tasks from storage
-  const [tasks, setTasks] = useState(loadTasks());
+useEffect(()=>{
+setUsers(getUsers());
+},[])
 
-  // Theme state
-  const [dark, setDark] = useState(false);
+useEffect(()=>{
+saveUsers(users);
+},[users])
 
-  // Add new task
-  function handleAddTask(text) {
+const addUser = (user)=>{
 
-    if (!text.trim()) return;
+if(editUser){
 
-    const newTask = {
-      text: text,
-      done: false
-    };
+setUsers(users.map(u =>
+u.id === user.id ? user : u
+));
 
-    const updatedTasks = addTask(tasks, newTask);
+setEditUser(null);
 
-    setTasks(updatedTasks);
-  }
+}else{
 
-  // Delete task
-  function handleDeleteTask(index) {
+setUsers([...users,user]);
 
-    const updatedTasks = deleteTask(tasks, index);
+}
 
-    setTasks(updatedTasks);
-  }
+}
 
-  // Toggle task completion
-  function handleToggleTask(index) {
+const deleteUser = (id)=>{
+setUsers(users.filter(u=>u.id !== id))
+}
 
-    const updatedTasks = toggleTask(tasks, index);
+const startEdit = (user)=>{
+setEditUser(user)
+}
 
-    setTasks(updatedTasks);
-  }
+return(
 
-  // Switch theme
-  function toggleTheme() {
-    setDark(!dark);
-  }
+<div>
 
-  return (
-    <ThemeProvider theme={dark ? darkTheme : lightTheme}>
+<GlobalStyle/>
 
-      <GlobalStyle />
+<Header/>
 
-      <Header toggleTheme={toggleTheme} />
+<Form
+addUser={addUser}
+editUser={editUser}
+/>
 
-      <TaskForm addTask={handleAddTask} />
+<Table
+users={users}
+deleteUser={deleteUser}
+startEdit={startEdit}
+/>
 
-      {tasks.map((task, index) => (
-        <TaskCard
-          key={index}
-          task={task.text}
-          done={task.done}
-          onDelete={() => handleDeleteTask(index)}
-          onToggle={() => handleToggleTask(index)}
-        />
-      ))}
+</div>
 
-    </ThemeProvider>
-  );
+)
+
 }
 
 export default App;
