@@ -76,7 +76,8 @@ src/
 
 1. Clone the Project
 
-https://git clone github.com/aiu-dev/smart-result-viewer.git
+ clone
+https:// github.com/aiu-dev/smart-result-viewer.git
 
 cd smart-result-viewer
 
