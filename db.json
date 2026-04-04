@@ -1,0 +1,51 @@
+{
+  "lecturers": [
+    {
+      "email": "abubakaribrahimumar806@gmail.com",
+      "password": "123456",
+      "id": "bBKZmyNomU8"
+    }
+  ],
+  "students": [
+    {
+      "fullname": "Abubakar ibrahim umar",
+      "matric": "UG241001",
+      "department": "computer science",
+      "program": "Bsc",
+      "level": "100",
+      "semester": "First",
+      "courses": [
+        {
+          "course": "Csc111",
+          "test": "20",
+          "exam": "30",
+          "unit": "1",
+          "score": 50,
+          "grade": "C",
+          "point": 3
+        },
+        {
+          "course": "Mth112",
+          "test": "20",
+          "exam": "30",
+          "unit": "3",
+          "score": 50,
+          "grade": "C",
+          "point": 3
+        },
+        {
+          "course": "Cgf11w",
+          "test": "20",
+          "exam": "30",
+          "unit": "3",
+          "score": 50,
+          "grade": "C",
+          "point": 3
+        }
+      ],
+      "lecturerId": "bBKZmyNomU8",
+      "id": "J04cWMNLPl4"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

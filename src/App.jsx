@@ -1,72 +1,24 @@
-import {useState,useEffect} from "react";
-import Header from "./components/Header";
-import Form from "./components/Form";
-import Table from "./components/Table";
-import GlobalStyle from "./styles/GlobalStyle";
-import {saveUsers,getUsers} from "./utils/storage";
+import { useState } from "react";
+import Welcome from "./pages/Welcome";
+import Auth from "./pages/Auth";
+import Dashboard from "./pages/Dashboard";
+import Admin from "./pages/Admin";
 
-function App(){
+function App() {
 
-const [users,setUsers] = useState([]);
-const [editUser,setEditUser] = useState(null);
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user"))
+  );
 
-useEffect(()=>{
-setUsers(getUsers());
-},[])
+  const [role, setRole] = useState(null);
 
-useEffect(()=>{
-saveUsers(users);
-},[users])
+  if (!user && !role) return <Welcome setRole={setRole} />;
 
-const addUser = (user)=>{
+  if (!user) return <Auth role={role} setUser={setUser} />;
 
-if(editUser){
+  if (user.role === "lecturer") return <Admin user={user} />;
 
-setUsers(users.map(u =>
-u.id === user.id ? user : u
-));
-
-setEditUser(null);
-
-}else{
-
-setUsers([...users,user]);
-
-}
-
-}
-
-const deleteUser = (id)=>{
-setUsers(users.filter(u=>u.id !== id))
-}
-
-const startEdit = (user)=>{
-setEditUser(user)
-}
-
-return(
-
-<div>
-
-<GlobalStyle/>
-
-<Header/>
-
-<Form
-addUser={addUser}
-editUser={editUser}
-/>
-
-<Table
-users={users}
-deleteUser={deleteUser}
-startEdit={startEdit}
-/>
-
-</div>
-
-)
-
+  return <Dashboard user={user} />;
 }
 
 export default App;

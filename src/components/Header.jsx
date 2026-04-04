@@ -1,12 +1,9 @@
-import styled from "styled-components";
-
-const Title = styled.h1`
-text-align:center;
-color:#2c3e50;
-`;
-
-function Header(){
-return <Title>User Registration Dashboard</Title>
+function Header() {
+  return (
+    <div className="bg-blue-600 text-white p-4 text-center text-xl font-bold">
+      Smart Result Viewer
+    </div>
+  );
 }
 
 export default Header;

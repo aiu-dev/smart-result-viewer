@@ -1,117 +1,304 @@
-User Registration Dashboard (React)
+🎓 Smart Result Viewer
 
-Project Overview
+📌 Project Overview
 
-This project is a Single Page React Application that demonstrates the use of reusable components.
-The application allows users to register, edit, delete, and view user information in a table.
+Smart Result Viewer is a full-featured university result management system built with React, Axios, JSON Server, and Tailwind CSS.
 
-The project was built to demonstrate component reusability, state management, and clean React architecture, which are essential skills for a frontend developer.
+It allows lecturers to manage student academic records and enables students to securely view and export their results in a professional format.
 
----
-
-Features
-
-- Add new users
-- Edit user information
-- Delete users
-- Display users in a dynamic table
-- Reusable React components
-- Styled UI using styled-components
-- Data persistence using LocalStorage
-- Single page application
+This system simulates a real-world university result processing workflow, including course registration, grading, GPA calculation, and result export.
 
 ---
 
-Reusable Components
+🚀 Features
 
-This project contains 6+ reusable components:
+👨‍🏫 Lecturer (Admin)
 
-1. Header
-2. Form
-3. Input
-4. Button
-5. Checkbox
-6. Table
-7. TableRow
+- Register and login
+- Add new students
+- Add multiple courses (7–12 courses supported)
+- Record test and exam scores
+- Automatic grade & GPA calculation
+- Edit student records
+- Delete student records
+- View all students and their results in a structured table
 
-Each component is designed to be reusable and maintainable.
+🎓 Student
 
----
-
-Project Structure
-
-src
- ├── components
- │   ├── Header.jsx
- │   ├── Form.jsx
- │   ├── Input.jsx
- │   ├── Button.jsx
- │   ├── Checkbox.jsx
- │   ├── Table.jsx
- │   └── TableRow.jsx
- │
- ├── styles
- │   └── GlobalStyle.js
- │
- ├── utils
- │   └── storage.js
- │
- ├── App.jsx
- └── main.jsx
+- Login using Full Name + Matric Number
+- View personal results only
+- See:
+  - Courses
+  - Test & Exam scores
+  - Grades
+  - Units
+  - Quality Points
+  - GPA
+- Filter results by:
+  - First Semester
+  - Second Semester
+- Export result as PDF (A4 format)
 
 ---
 
-Technologies Used
+🛠️ Tech Stack
 
-- React
-- Vite
-- JavaScript (ES6)
-- styled-components
-- LocalStorage
+- Frontend: React (Vite)
+- Styling: Tailwind CSS
+- API Requests: Axios
+- Backend (Mock): JSON Server
+- PDF Export: jsPDF + html2canvas
 
 ---
 
-Installation
+📂 Project Structure
 
-Clone the repository:
+src/
+│── components/
+│   └── ResultCard.jsx
+│
+│── pages/
+│   ├── Admin.jsx
+│   ├── Dashboard.jsx
+│   └── Welcome.jsx
+│
+│── services/
+│   └── api.js
+│
+│── utils/
+│   └── calculateGPA.js
+│
+└── App.jsx
 
-git clone https://github.com/aiu-dev/react-components-task.git
+---
 
-Navigate into the project:
+⚙️ Installation & Setup
 
+1. Clone the Project
 
+git clone github.com/aiu-dev/smart-result-viewer.git
+cd smart-result-viewer
 
-Install dependencies:
+---
+
+2. Install Dependencies
 
 npm install
 
-Start the development server:
+---
+
+3. Install Required Packages
+
+npm install axios json-server tailwindcss jspdf html2canvas
+
+---
+
+4. Setup JSON Server
+
+Create a file:
+
+db.json
+
+Example:
+
+{
+  "students": [],
+  "users": []
+}
+
+---
+
+5. Add Script in "package.json"
+
+"scripts": {
+  "server": "json-server --watch db.json --port 5000",
+  "dev": "vite"
+}
+
+---
+
+6. Run the Project
+
+Start backend:
+
+npm run server
+
+Start frontend:
 
 npm run dev
 
-Open your browser and go to:
+---
 
-http://localhost:5173
+🧑‍💻 How to Use the Website (Step-by-Step)
 
 ---
 
+🟢 Step 1: Open the App
 
-Learning Outcomes
+- Visit: "http://localhost:5173"
+- You will see the Welcome Page
 
-Through this project, the following React concepts were practiced:
+---
 
-- Component reusability
-- Props
+🟢 Step 2: Choose User Type
+
+- Click:
+  - Login as Lecturer OR
+  - Login as Student
+
+---
+
+👨‍🏫 Lecturer Flow
+
+🟢 Step 3: Register / Login
+
+- Enter email and password
+- Login to dashboard
+
+---
+
+🟢 Step 4: Add Student
+
+Fill the form:
+
+- Full Name
+- Matric Number
+- Department
+- Program
+- Level
+- Semester (First / Second)
+
+---
+
+🟢 Step 5: Add Courses
+
+For each course:
+
+- Course Name
+- Test Score
+- Exam Score
+- Unit
+
+Click Add Course
+
+👉 Repeat for multiple courses (7–12 courses)
+
+---
+
+🟢 Step 6: Save Student
+
+- Click Add Student
+- Student appears in table
+
+---
+
+🟢 Step 7: Manage Records
+
+- Edit student → updates data
+- Delete student → removes record
+
+---
+
+🎓 Student Flow
+
+🟢 Step 8: Login
+
+Enter:
+
+- Full Name
+- Matric Number
+
+👉 Must match lecturer’s record
+
+---
+
+🟢 Step 9: View Result
+
+Student can see:
+
+- All courses
+- Scores
+- Grades
+- Units
+- GPA
+
+---
+
+🟢 Step 10: Filter Result
+
+Use dropdown:
+
+- First Semester
+- Second Semester
+
+---
+
+🟢 Step 11: Export Result
+
+Click:
+
+Export PDF
+
+👉 Downloads:
+
+- A4 formatted result sheet
+
+---
+
+🧮 GPA Calculation Formula
+
+GPA = Total Quality Points / Total Units
+
+Where:
+
+- Quality Point = Grade Point × Unit
+
+---
+
+🎨 UI Features
+
+- Fully responsive design
+- Mobile-friendly forms
+- Clean table layout
+- A4 optimized PDF export
+- Smooth animations
+
+---
+
+📌 Future Improvements
+
+- CGPA across semesters
+- Authentication with real backend
+- Role-based dashboard routing
+- Transcript generation
+- Cloud database integration
+
+---
+
+🏆 Conclusion
+
+This project demonstrates:
+
+- Real-world academic system design
+- Advanced React architecture
 - State management
-- Form handling
-- Dynamic rendering
-- LocalStorage integration
-- Clean project structure
+- API handling
+- UI/UX best practices
 
 ---
 
-Author
+👤 Author
 
 Abubakar Ibrahim
+Project: Smart Result Viewer
+Purpose: Internship Final Project
 
-Frontend Developer Intern Project
+---
+
+📄 License
+
+This project is for educational and internship purposes.
+
+---
+
+🔥 Built with passion and precision
