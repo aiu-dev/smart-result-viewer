@@ -5,6 +5,8 @@ import {
   totalQualityPoints
 } from "../utils/calculateGPA";
 
+import Chart from "./Chart"
+;
 function ResultCard({ student }) {
 
   const courses = student.courses || [];
@@ -73,7 +75,7 @@ function ResultCard({ student }) {
         </p>
 
       </div>
-
+        <Chart courses={courses} />
     </div>
   );
 }
