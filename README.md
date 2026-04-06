@@ -8,9 +8,9 @@ It allows lecturers to manage student academic records and enables students to s
 
 This system simulates a real-world university result processing workflow, including course registration, grading, GPA calculation, and result export.
 
-Live Application: [View App]( https://drive.google.com/uc?export=download&id=12HV1JeVM9O6PUIaDkpZMQp4jrcbTayJu )
+Live Application: [View App]( https://smart-result-viewer.vercel.app )
 
-Project Presentation: [Download PDF](https://drive.google.com/uc?export=download&id=12HV1JeVM9O6PUIaDkpZMQp4jrcbTayJu)
+Project Presentation: [Download PDF](https://smart-result-viewer.vercel.app/presentation.pdf )
 
 
 🚀 Features
@@ -74,6 +74,10 @@ src/
 └── App.jsx
 
 ---
+
+## 📸 Screenshots
+
+[View Screenshots](https://github.com/aiu-dev/smart-result-viewer/tree/main/screenshot)
 
 ⚙️ Installation & Setup
 
