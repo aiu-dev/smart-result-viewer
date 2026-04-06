@@ -77,7 +77,7 @@ src/
 
 ## 📸 Screenshots
 
-[View Screenshots](https://github.com/aiu-dev/smart-result-viewer/tree/main/screenshot)
+[View Screenshots](https://github.com/aiu-dev/smart-result-viewer/tree/main/screenshots)
 
 ⚙️ Installation & Setup
 
