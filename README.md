@@ -8,7 +8,10 @@ It allows lecturers to manage student academic records and enables students to s
 
 This system simulates a real-world university result processing workflow, including course registration, grading, GPA calculation, and result export.
 
----
+Live Application: [View App]( https://drive.google.com/uc?export=download&id=12HV1JeVM9O6PUIaDkpZMQp4jrcbTayJu )
+
+Project Presentation: [Download PDF](https://drive.google.com/uc?export=download&id=12HV1JeVM9O6PUIaDkpZMQp4jrcbTayJu)
+
 
 🚀 Features
 
