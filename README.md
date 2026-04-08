@@ -12,6 +12,7 @@ Live Application: [View App]( https://smart-result-viewer.vercel.app )
 
 Project Presentation: [Download PDF](https://smart-result-viewer.vercel.app/presentation.pdf )
 
+color pallete link[color pallete]( https://coolors.co/2563eb-1e40af-22c55e-f59e0b-ef4444-f9fafb-ffffff-111827-6b7280-e5e7eb  )
 
 🚀 Features
 
